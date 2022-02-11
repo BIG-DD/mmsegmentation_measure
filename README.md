@@ -1,6 +1,6 @@
-##使用 [MMsegmentation](https://github.com/open-mmlab/mmsegmentation/tree/v0.18.0) 的2D语义分割网络测量物体的尺寸
+## 使用 [MMsegmentation](https://github.com/open-mmlab/mmsegmentation/tree/v0.18.0) 的2D语义分割网络测量物体的尺寸
 
-###搭建环境：
+### 搭建环境：
 系统：Windows10
 
 Mmcv-full版本为1.3.15
@@ -11,18 +11,18 @@ Torchvision0.9
 
 mmsegmentation 0.18.0
 
-####步骤1：
+#### 步骤1：
 在anaconda中创建虚拟环境，python版本为3.6
 
-####步骤2：
+#### 步骤2：
 安装CUDA、Pytorch
 
-####步骤3：
+#### 步骤3：
 安装mmcv-full
 
 `pip install mmcv-full==1.3.15 -f https://download.openmmlab.com/mmcv/dist/cu102/torch1.6.0/index.html`
 
-####测试：
+#### 测试：
 在`mmsegmentation`目录下新建文件夹`checkpoints`
 
 `mkdir checkpoints`
@@ -42,14 +42,14 @@ cd demo
 `python image_demo.py demo.png ..\configs\pspnet\pspnet_r50-d8_512x1024_40k_cityscapes.py 
   ..\checkpoints\pspnet_r50-d8_512x1024_40k_cityscapes_20200605_003338-2966598c.pth`
 
-##使用自己的数据集进行训练：
+## 使用自己的数据集进行训练：
 
-###数据集准备：
+### 数据集准备：
 使用labelme标注数据，然后将标注的json文件转换成png,生成两个文件夹:原图文件夹jpg和掩膜文件夹png
 (图像位深度为8，需要检查掩膜文件夹中的png文件是否图像位深为8，若有不为8的数据，需要进行转换,
 转换后注意看标签的像素值是否发生变化）
 
-###配置相关参数：
+### 配置相关参数：
 
   相关的目录树
 ```
@@ -80,7 +80,7 @@ cd demo
   │     ├─zhawa_voc.py(复制voc.py改名)
   │     └─__init__.py(修改)
 ```
-###修改过的地方
+### 修改过的地方
 `deeplabv3plus_r50-d8_512x1024_40k_cityscapes_zhawa.py`内容：
 ```
 _base_ = [
@@ -242,7 +242,7 @@ with open(filename_val,'w') as file_object_val:
         file_object_val.write("\n")
 
 ```
-###运行`tools\train.py`文件等待训练。。。。。。。。。。。。。。。
+### 运行`tools\train.py`文件等待训练。。。。。。。。。。。。。。。
 
 
-###修改路径，运行`tools\xxx_test`文件，进行物体尺寸测量。
+### 修改路径，运行`tools\xxx_test`文件，进行物体尺寸测量。
