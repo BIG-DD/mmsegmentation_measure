@@ -1,168 +1,248 @@
-<div align="center">
-  <img src="resources/mmseg-logo.png" width="600"/>
-</div>
-<br />
+##使用 [MMsegmentation](https://github.com/open-mmlab/mmsegmentation/tree/v0.18.0) 的2D语义分割网络测量物体的尺寸
 
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/mmsegmentation)](https://pypi.org/project/mmsegmentation/)
-[![PyPI](https://img.shields.io/pypi/v/mmsegmentation)](https://pypi.org/project/mmsegmentation)
-[![docs](https://img.shields.io/badge/docs-latest-blue)](https://mmsegmentation.readthedocs.io/en/latest/)
-[![badge](https://github.com/open-mmlab/mmsegmentation/workflows/build/badge.svg)](https://github.com/open-mmlab/mmsegmentation/actions)
-[![codecov](https://codecov.io/gh/open-mmlab/mmsegmentation/branch/master/graph/badge.svg)](https://codecov.io/gh/open-mmlab/mmsegmentation)
-[![license](https://img.shields.io/github/license/open-mmlab/mmsegmentation.svg)](https://github.com/open-mmlab/mmsegmentation/blob/master/LICENSE)
-[![issue resolution](https://isitmaintained.com/badge/resolution/open-mmlab/mmsegmentation.svg)](https://github.com/open-mmlab/mmsegmentation/issues)
-[![open issues](https://isitmaintained.com/badge/open/open-mmlab/mmsegmentation.svg)](https://github.com/open-mmlab/mmsegmentation/issues)
+###搭建环境：
+系统：Windows10
 
-Documentation: https://mmsegmentation.readthedocs.io/
+Mmcv-full版本为1.3.15
 
-English | [简体中文](README_zh-CN.md)
+Torch1.8.0
 
-## Introduction
+Torchvision0.9
 
-MMSegmentation is an open source semantic segmentation toolbox based on PyTorch.
-It is a part of the OpenMMLab project.
+mmsegmentation 0.18.0
 
-The master branch works with **PyTorch 1.3+**.
+####步骤1：
+在anaconda中创建虚拟环境，python版本为3.6
 
-![demo image](resources/seg_demo.gif)
+####步骤2：
+安装CUDA、Pytorch
 
-### Major features
+####步骤3：
+安装mmcv-full
 
-- **Unified Benchmark**
+`pip install mmcv-full==1.3.15 -f https://download.openmmlab.com/mmcv/dist/cu102/torch1.6.0/index.html`
 
-  We provide a unified benchmark toolbox for various semantic segmentation methods.
+####测试：
+在`mmsegmentation`目录下新建文件夹`checkpoints`
 
-- **Modular Design**
+`mkdir checkpoints`
 
-  We decompose the semantic segmentation framework into different components and one can easily construct a customized semantic segmentation framework by combining different modules.
+`cd checkpoints`
 
-- **Support of multiple methods out of box**
+`下载pspnet_r50-d8_512x1024_40k_cityscapes_20200605_003338-2966598c.pth`
 
-  The toolbox directly supports popular and contemporary semantic segmentation frameworks, *e.g.* PSPNet, DeepLabV3, PSANet, DeepLabV3+, etc.
+地址：
+https://github.com/open-mmlab/mmsegmentation/tree/master/configs/pspnet
 
-- **High efficiency**
+cd ..\
 
-  The training speed is faster than or comparable to other codebases.
+cd demo
 
-## License
+运行
+`python image_demo.py demo.png ..\configs\pspnet\pspnet_r50-d8_512x1024_40k_cityscapes.py 
+  ..\checkpoints\pspnet_r50-d8_512x1024_40k_cityscapes_20200605_003338-2966598c.pth`
 
-This project is released under the [Apache 2.0 license](LICENSE).
+##使用自己的数据集进行训练：
 
-## Changelog
+###数据集准备：
+使用labelme标注数据，然后将标注的json文件转换成png,生成两个文件夹:原图文件夹jpg和掩膜文件夹png
+(图像位深度为8，需要检查掩膜文件夹中的png文件是否图像位深为8，若有不为8的数据，需要进行转换,
+转换后注意看标签的像素值是否发生变化）
 
-v0.18.0 was released in 10/07/2021.
-Please refer to [changelog.md](docs/changelog.md) for details and release history.
+###配置相关参数：
 
-## Benchmark and model zoo
-
-Results and models are available in the [model zoo](docs/model_zoo.md).
-
-Supported backbones:
-
-- [x] ResNet (CVPR'2016)
-- [x] ResNeXt (CVPR'2017)
-- [x] [HRNet (CVPR'2019)](configs/hrnet)
-- [x] [ResNeSt (ArXiv'2020)](configs/resnest)
-- [x] [MobileNetV2 (CVPR'2018)](configs/mobilenet_v2)
-- [x] [MobileNetV3 (ICCV'2019)](configs/mobilenet_v3)
-- [x] [Vision Transformer (ICLR'2021)](configs/vit)
-- [x] [Swin Transformer (ArXiv'2021)](configs/swin)
-
-Supported methods:
-
-- [x] [FCN (CVPR'2015/TPAMI'2017)](configs/fcn)
-- [x] [UNet (MICCAI'2016/Nat. Methods'2019)](configs/unet)
-- [x] [PSPNet (CVPR'2017)](configs/pspnet)
-- [x] [DeepLabV3 (ArXiv'2017)](configs/deeplabv3)
-- [x] [Mixed Precision (FP16) Training (ArXiv'2017)](configs/fp16)
-- [x] [BiSeNetV1 (ECCV'2018)](configs/bisenetv1)
-- [x] [PSANet (ECCV'2018)](configs/psanet)
-- [x] [DeepLabV3+ (CVPR'2018)](configs/deeplabv3plus)
-- [x] [UPerNet (ECCV'2018)](configs/upernet)
-- [x] [ICNet (ECCV'2018)](configs/icnet)
-- [x] [NonLocal Net (CVPR'2018)](configs/nonlocal_net)
-- [x] [EncNet (CVPR'2018)](configs/encnet)
-- [x] [Semantic FPN (CVPR'2019)](configs/sem_fpn)
-- [x] [DANet (CVPR'2019)](configs/danet)
-- [x] [APCNet (CVPR'2019)](configs/apcnet)
-- [x] [EMANet (ICCV'2019)](configs/emanet)
-- [x] [CCNet (ICCV'2019)](configs/ccnet)
-- [x] [DMNet (ICCV'2019)](configs/dmnet)
-- [x] [ANN (ICCV'2019)](configs/ann)
-- [x] [GCNet (ICCVW'2019/TPAMI'2020)](configs/gcnet)
-- [x] [FastFCN (ArXiv'2019)](configs/fastfcn)
-- [x] [Fast-SCNN (ArXiv'2019)](configs/fastscnn)
-- [x] [ISANet (ArXiv'2019/IJCV'2021)](configs/isanet)
-- [x] [OCRNet (ECCV'2020)](configs/ocrnet)
-- [x] [DNLNet (ECCV'2020)](configs/dnlnet)
-- [x] [PointRend (CVPR'2020)](configs/point_rend)
-- [x] [CGNet (TIP'2020)](configs/cgnet)
-- [x] [BiSeNetV2 (IJCV'2021)](configs/bisenetv2)
-- [x] [SETR (CVPR'2021)](configs/setr)
-- [x] [DPT (ArXiv'2021)](configs/dpt)
-- [x] [SegFormer (ArXiv'2021)](configs/segformer)
-
-Supported datasets:
-
-- [x] [Cityscapes](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/dataset_prepare.md#cityscapes)
-- [x] [PASCAL VOC](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/dataset_prepare.md#pascal-voc)
-- [x] [ADE20K](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/dataset_prepare.md#ade20k)
-- [x] [Pascal Context](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/dataset_prepare.md#pascal-context)
-- [x] [COCO-Stuff 10k](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/dataset_prepare.md#coco-stuff-10k)
-- [x] [COCO-Stuff 164k](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/dataset_prepare.md#coco-stuff-164k)
-- [x] [CHASE_DB1](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/dataset_prepare.md#chase-db1)
-- [x] [DRIVE](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/dataset_prepare.md#drive)
-- [x] [HRF](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/dataset_prepare.md#hrf)
-- [x] [STARE](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/dataset_prepare.md#stare)
-- [x] [Dark Zurich](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/dataset_prepare.md#dark-zurich)
-- [x] [Nighttime Driving](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/dataset_prepare.md#nighttime-driving)
-
-## Installation
-
-Please refer to [get_started.md](docs/get_started.md#installation) for installation and [dataset_prepare.md](docs/dataset_prepare.md#prepare-datasets) for dataset preparation.
-
-## Get Started
-
-Please see [train.md](docs/train.md) and [inference.md](docs/inference.md) for the basic usage of MMSegmentation.
-There are also tutorials for [customizing dataset](docs/tutorials/customize_datasets.md), [designing data pipeline](docs/tutorials/data_pipeline.md), [customizing modules](docs/tutorials/customize_models.md), and [customizing runtime](docs/tutorials/customize_runtime.md).
-We also provide many [training tricks](docs/tutorials/training_tricks.md) for better training and [useful tools](docs/useful_tools.md) for deployment.
-
-A Colab tutorial is also provided. You may preview the notebook [here](demo/MMSegmentation_Tutorial.ipynb) or directly [run](https://colab.research.google.com/github/open-mmlab/mmsegmentation/blob/master/demo/MMSegmentation_Tutorial.ipynb) on Colab.
-
-## Citation
-
-If you find this project useful in your research, please consider cite:
-
-```latex
-@misc{mmseg2020,
-    title={{MMSegmentation}: OpenMMLab Semantic Segmentation Toolbox and Benchmark},
-    author={MMSegmentation Contributors},
-    howpublished = {\url{https://github.com/open-mmlab/mmsegmentation}},
-    year={2020}
-}
+  相关的目录树
 ```
+  ├─checkpoints(下载预训练权重,地址和测试时候的一样)
+  ├─configs
+  │  ├─deeplabv3plus
+  │                 └─deeplabv3plus_r50-d8_512x1024_40k_cityscapes_zhawa.py(复制deeplabv3plus_r50-d8_512x1024_40k_cityscapes改名)
+  │  └─_base_
+  │      ├─datasets
+  │      │         └─train_pratice.py(复制pascal_voc12.py改名)
+  │      ├─models           
+  │      └─schedules
+  │                └─schedule_20k.py(修改)
+  ├─data
+  │  ├─zhawa(新建)
+  │     ├─zhawa_result(网络训练好的权重保存地址)
+  │     ├─zhawa_test(测试图片分割预测结果保存位置，及距离测量结果保存)
+  │     ├─jpj(原图)
+  │     ├─png(mask)
+  │     ├─zdf
+  │             └─HD_zhawa(存放原始的zdf文件，其中的zdf文件名要与test.txt中的文件名一一对应)
+  │     └─splits(分离训练集、验证集和测试集)
+  │             ├─train.txt
+  │             ├─val.txt
+  │             └─test.txt
+  ├─mmseg(修改以后将文件夹复制到 .../envs\mmdetection\Lib\site-packages，及环境中)
+  │  ├─datasets
+  │     ├─zhawa_voc.py(复制voc.py改名)
+  │     └─__init__.py(修改)
+```
+###修改过的地方
+`deeplabv3plus_r50-d8_512x1024_40k_cityscapes_zhawa.py`内容：
+```
+_base_ = [
+      '../_base_/models/deeplabv3plus_r50-d8.py',
+      '../_base_/datasets/train_pratice.py', '../_base_/default_runtime.py', //修改train_pratice.py
+      '../_base_/schedules/schedule_40k.py'
+  ]
+```
+`train_pratice.py`的内容
+```
+# dataset settings
+dataset_type = 'PascalVOCDataset_zhawa' //制作数据集时的类名字
+data_root = '../data/zhawa/'  //数据集的路径
+img_norm_cfg = dict(
+    mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
+crop_size = (768, 512)
+train_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(type='LoadAnnotations'),
+    dict(type='Resize', img_scale=(1024, 768), ratio_range=(0.5, 2.0)),
+    dict(type='RandomCrop', crop_size=crop_size, cat_max_ratio=0.75),
+    dict(type='RandomFlip', prob=0.5),
+    dict(type='PhotoMetricDistortion'),
+    dict(type='Normalize', **img_norm_cfg),
+    dict(type='Pad', size=crop_size, pad_val=0, seg_pad_val=255),
+    dict(type='DefaultFormatBundle'),
+    dict(type='Collect', keys=['img', 'gt_semantic_seg']),
+]
+test_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(
+        type='MultiScaleFlipAug',
+        img_scale=(1024, 768),
+        # img_ratios=[0.5, 0.75, 1.0, 1.25, 1.5, 1.75],
+        flip=False,
+        transforms=[
+            dict(type='Resize', keep_ratio=True),
+            dict(type='RandomFlip'),
+            dict(type='Normalize', **img_norm_cfg),
+            dict(type='ImageToTensor', keys=['img']),
+            dict(type='Collect', keys=['img']),
+        ])
+]
+data = dict(
+    samples_per_gpu=2, //通过这个参数设置batch size
+    workers_per_gpu=2, //
+    train=dict(
+        type=dataset_type,
+        data_root=data_root,
+        img_dir='jpj',
+        ann_dir='png',
+        split = 'splits/train.txt',
+        pipeline=train_pipeline),
+    val=dict(
+        type=dataset_type,
+        data_root=data_root,
+        img_dir='jpj',
+        ann_dir='png',
+        split = 'splits/val.txt',
+        pipeline=test_pipeline),
+    test=dict(
+        type=dataset_type,
+        data_root=data_root,
+        img_dir='jpj',
+        ann_dir='png',
+        split = 'splits/test.txt',
+        pipeline=test_pipeline))
 
-## Contributing
 
-We appreciate all contributions to improve MMSegmentation. Please refer to [CONTRIBUTING.md](.github/CONTRIBUTING.md) for the contributing guideline.
+```
+`schedule_40k.py`的内容
+```
+# optimizer
+optimizer = dict(type='SGD', lr=0.01, momentum=0.9, weight_decay=0.0005)
+optimizer_config = dict()
+# learning policy
+lr_config = dict(policy='poly', power=0.9, min_lr=1e-4, by_epoch=False)
+# runtime settings
+runner = dict(type='IterBasedRunner', max_iters=20000) //设置训练时网络迭代的epoch
+checkpoint_config = dict(by_epoch=False, interval=200) //训练时每隔200epoch，网络保存一次权重
+evaluation = dict(interval=200, metric='mIoU') //训练时每隔200epoch，网络使用验证集进行验证一次
 
-## Acknowledgement
+```
+`train_pratice.py`的内容
+```
+import os.path as osp
 
-MMSegmentation is an open source project that welcome any contribution and feedback.
-We wish that the toolbox and benchmark could serve the growing research
-community by providing a flexible as well as standardized toolkit to reimplement existing methods
-and develop their own new semantic segmentation methods.
+from .builder import DATASETS
+from .custom import CustomDataset
 
-## Projects in OpenMMLab
 
-- [MMCV](https://github.com/open-mmlab/mmcv): OpenMMLab foundational library for computer vision.
-- [MMClassification](https://github.com/open-mmlab/mmclassification): OpenMMLab image classification toolbox and benchmark.
-- [MMDetection](https://github.com/open-mmlab/mmdetection): OpenMMLab detection toolbox and benchmark.
-- [MMDetection3D](https://github.com/open-mmlab/mmdetection3d): OpenMMLab's next-generation platform for general 3D object detection.
-- [MMSegmentation](https://github.com/open-mmlab/mmsegmentation): OpenMMLab semantic segmentation toolbox and benchmark.
-- [MMAction2](https://github.com/open-mmlab/mmaction2): OpenMMLab's next-generation action understanding toolbox and benchmark.
-- [MMTracking](https://github.com/open-mmlab/mmtracking): OpenMMLab video perception toolbox and benchmark.
-- [MMPose](https://github.com/open-mmlab/mmpose): OpenMMLab pose estimation toolbox and benchmark.
-- [MMEditing](https://github.com/open-mmlab/mmediting): OpenMMLab image and video editing toolbox.
-- [MMOCR](https://github.com/open-mmlab/mmocr): A Comprehensive Toolbox for Text Detection, Recognition and Understanding.
-- [MMGeneration](https://github.com/open-mmlab/mmgeneration): A powerful toolkit for generative models.
-- [MIM](https://github.com/open-mmlab/mim): MIM Installs OpenMMLab Packages.
+@DATASETS.register_module()
+class PascalVOCDataset_zhawa(CustomDataset):  //将PascalVOCDataset 改为PascalVOCDataset_zhawa
+    """train_db dataset.
+
+    In segmentation map annotation for Chase_db1, 0 stands for background,
+    which is included in 2 categories. ``reduce_zero_label`` is fixed to False.
+    The ``img_suffix`` is fixed to '.png' and ``seg_map_suffix`` is fixed to
+    '_1stHO.png'.
+    """
+
+    CLASSES = ('background', 'tielian', 'ruanguan')  //设置为自己数据集的标签名字，注意要加上background
+
+    PALETTE = [[128, 128, 128], [128, 0, 0], [0, 128, 0]]  //给每一个标签设置一个颜色
+
+    def __init__(self, **kwargs):
+        super(PascalVOCDataset_zhawa, self).__init__(  //将class的名称换为PascalVOCDataset_zhawa
+            img_suffix='.jpg',
+            seg_map_suffix='.png',
+            **kwargs)
+        assert osp.exists(self.img_dir)
+```
+`__init__.py`的内容
+```
+from .ade import ADE20KDataset
+from .builder import DATASETS, PIPELINES, build_dataloader, build_dataset
+from .chase_db1 import ChaseDB1Dataset
+from .cityscapes import CityscapesDataset
+from .custom import CustomDataset
+from .dataset_wrappers import ConcatDataset, RepeatDataset
+from .drive import DRIVEDataset
+from .hrf import HRFDataset
+from .pascal_context import PascalContextDataset
+from .stare import STAREDataset
+from .voc import PascalVOCDataset
+from .train_db import TrainDBDataset
+from .train_pratice import TrainPDataset
+from .zhawa_voc import PascalVOCDataset_zhawa
+
+__all__ = [
+    'CustomDataset', 'build_dataloader', 'ConcatDataset', 'RepeatDataset',
+    'DATASETS', 'build_dataset', 'PIPELINES', 'CityscapesDataset',
+    'PascalVOCDataset', 'ADE20KDataset', 'PascalContextDataset',
+    'ChaseDB1Dataset', 'DRIVEDataset', 'HRFDataset', 'STAREDataset',
+    'TrainDBDataset','TrainPDataset', 'PascalVOCDataset_zhawa'
+]
+
+
+生成split的代码
+import numpy as np
+filename_val='val.txt'
+filename_train='train.txt'
+train_list=[]
+for i in range(1,1203):
+    train_list.append(i)
+    np.random.shuffle(train_list)
+print(len(train_list))
+with open(filename_train,'w') as file_object_train:
+    for n in range(0,1051):
+        numper_train=train_list[n]
+        s_train=str(numper_train)
+        file_object_train.write(s_train.zfill(4))
+        file_object_train.write("\n")
+with open(filename_val,'w') as file_object_val:
+    for n in range(1051,1203):
+        numper_val=train_list[n]
+        s_val=str(numper_val)
+        file_object_val.write(s_val.zfill(4))
+        file_object_val.write("\n")
+
+```
+###运行`tools\train.py`文件等待训练。。。。。。。。。。。。。。。
+
+
+###修改路径，运行`tools\xxx_test`文件，进行物体尺寸测量。
