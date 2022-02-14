@@ -1,4 +1,6 @@
 ## 使用 [MMsegmentation](https://github.com/open-mmlab/mmsegmentation/tree/v0.18.0) 的2D语义分割网络测量物体的尺寸
+从项目使用 [zivid](https://www.zivid.com/zivid-two) 3D 结构光相机采集数据，随后基于MMsegmentation框架中的
+2D语义分割网络对2D图像进行分割，然后投影到3D数据中，分割出目标物体的3D信息。
 
 ### 搭建环境：
 系统：Windows10
